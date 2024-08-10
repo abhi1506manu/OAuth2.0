@@ -7,12 +7,12 @@ dotenv.config();
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/auth/google/callback"
+  callbackURL: "/auth/google/callback"
 },
 async (accessToken, refreshToken, profile, done) => {
   try {
     let user = await User.findOne({ googleId: profile.id });
-    console.log({accessToken, refreshToken, profile})
+    // console.log( profile)
     if (!user) {
       user = await User.create({
         googleId: profile.id,

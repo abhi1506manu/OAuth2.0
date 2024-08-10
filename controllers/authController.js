@@ -1,7 +1,7 @@
 import passport from "passport";
 
 const login = (req, res) => {
-  res.send(`<a href="http://localhost:5000/auth/google">Login with google</a>`);
+  res.render("login");
 };
 
 // const home = (req, res) => {
@@ -18,7 +18,6 @@ const logout = (req, res) => {
       return next(err);
     }
     res.redirect("/login");
-    res.send("redirected to login");
   });
 };
 
@@ -26,9 +25,23 @@ const googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
 });
 
-const googleAuthCallBack = passport.authenticate("google", {
-  failureRedirect: "/login",
-  successRedirect: "/",
-});
+// **** this is another way to handle google auth callback******
+
+// const googleAuthCallBack = passport.authenticate("google", {
+//   failureRedirect: "/login",
+//   successRedirect: "/",
+// });
+
+
+const googleAuthCallBack  = (req, res)=>{
+  if (req.user) {
+    res.render("Home")
+  } else {
+    res.redirect("/login");
+    console.log("Authentication failed",req.user);
+   
+  }
+
+}
 
 export { googleAuth, googleAuthCallBack, login, logout };
